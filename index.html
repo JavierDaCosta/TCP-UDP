@@ -7,37 +7,43 @@
   <style>
     :root { --bg:#00457C; --panel:#003666; --text:#f1f5f9; --muted:#c5d7ea; --line:#2a6aa0; --ok:#22c55e; --bad:#ef4444; --accent:#F99800; --tcp:#0ea5e9; --udp:#f59e0b; }
     * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:"Segoe UI",system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:20px; }
-    .wrap { max-width:1180px; margin:0 auto; }
-    header { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-bottom:18px; }
-    h1 { font-size:1.45rem; font-weight:750; } h1 span { color:var(--accent); }
-    .subtitle { color:var(--muted); font-size:0.92rem; margin-top:4px; }
+    body { font-family:"Segoe UI",system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:16px; }
+    .wrap { max-width:1200px; margin:0 auto; }
+    header { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-bottom:14px; }
+    h1 { font-size:1.35rem; font-weight:750; } h1 span { color:var(--accent); }
+    .subtitle { color:var(--muted); font-size:0.9rem; margin-top:4px; }
     .stats { display:flex; gap:10px; align-items:center; }
-    .badge, button.btn { border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:999px; padding:8px 14px; font-size:0.88rem; font-weight:600; }
+    .badge, button.btn { border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:999px; padding:8px 14px; font-size:0.86rem; font-weight:600; }
     button.btn { cursor:pointer; } button.btn.primary { background:#0369a1; border-color:#0284c7; }
-    .board { display:grid; grid-template-columns:1.15fr 1fr; gap:18px; }
-    @media (max-width:860px) { .board { grid-template-columns:1fr; } }
-    .stack, .bank { background:rgba(0,54,102,.72); border:1px solid var(--line); border-radius:18px; padding:16px; }
-    .section-title { font-size:0.78rem; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin-bottom:12px; font-weight:700; }
-    .layer { display:grid; grid-template-columns:120px 1fr; gap:10px; margin-bottom:12px; min-height:120px; }
-    .layer-meta { border-radius:12px; padding:10px; display:flex; flex-direction:column; justify-content:center; color:#fff; }
-    .layer-meta .num { font-size:1.05rem; font-weight:800; }
-    .layer-meta .name { font-size:0.72rem; font-weight:600; opacity:.92; margin-top:4px; line-height:1.25; }
-    .drop { border:2px dashed #475569; border-radius:12px; background:rgba(15,23,42,.45); min-height:120px; padding:8px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+    .board { display:grid; grid-template-columns:1.55fr 0.85fr; gap:16px; }
+    @media (max-width:900px) { .board { grid-template-columns:1fr; } }
+    .stack, .bank { background:rgba(0,54,102,.72); border:1px solid var(--line); border-radius:16px; padding:14px; }
+    .cols { display:grid; grid-template-columns:1.4fr 0.9fr 0.7fr; gap:8px; margin-bottom:8px; }
+    .cols.head { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:.08em; font-weight:700; padding:0 4px 6px; }
+    .app {
+      background:#00305a; border:1px solid var(--line); border-radius:10px; padding:10px 12px;
+      font-size:0.86rem; font-weight:650; line-height:1.35; display:flex; align-items:center; min-height:58px;
+    }
+    .drop {
+      border:2px dashed #475569; border-radius:10px; background:rgba(15,23,42,.45);
+      min-height:58px; padding:6px; display:flex; align-items:center; justify-content:center;
+    }
     .drop.over { border-color:var(--accent); background:rgba(249,152,0,.16); }
     .drop.ok-flash { border-color:var(--ok); background:rgba(34,197,94,.12); }
     .drop.bad-flash { border-color:var(--bad); background:rgba(239,68,68,.12); }
-    .chip { user-select:none; touch-action:none; cursor:grab; background:#0f172a; border:1px solid #64748b; color:#fff; border-radius:10px; padding:10px 12px; font-weight:700; font-size:0.86rem; line-height:1.35; display:inline-flex; max-width:100%; }
+    .chip { user-select:none; touch-action:none; cursor:grab; background:#0f172a; border:1px solid #64748b; color:#fff; border-radius:10px; padding:8px 10px; font-weight:700; font-size:0.82rem; line-height:1.3; display:inline-flex; }
+    .chip.tcp { border-color:#38bdf8; } .chip.udp { border-color:#fbbf24; }
     .chip.dragging { opacity:.35; } .chip.locked { cursor:default; border-color:transparent; }
-    .bank-grid { display:flex; flex-direction:column; gap:8px; min-height:120px; }
+    .bank-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-weight:700; margin:10px 0 8px; }
+    .bank-title:first-child { margin-top:0; }
+    .bank-grid { display:flex; flex-wrap:wrap; gap:8px; min-height:44px; }
     .ghost { position:fixed; pointer-events:none; z-index:50; margin:0; }
-    .hint { margin-top:12px; color:var(--muted); font-size:0.82rem; line-height:1.45; }
-    .feedback { margin-top:14px; border-radius:12px; padding:12px 14px; background:#0b1220; border:1px solid var(--line); min-height:52px; font-size:0.9rem; color:#cbd5e1; }
+    .feedback { margin-top:12px; border-radius:12px; padding:12px; background:#0b1220; border:1px solid var(--line); min-height:48px; font-size:0.88rem; color:#cbd5e1; }
     .feedback strong { color:#fff; }
-    .win { display:none; margin-top:14px; padding:14px; border-radius:14px; background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(14,165,233,.12)); border:1px solid rgba(16,185,129,.4); }
-    .win.show { display:block; } .win h2 { font-size:1.05rem; margin-bottom:8px; }
-    .win ul { margin-left:18px; color:#d1fae5; font-size:0.86rem; line-height:1.55; }
-    .note { margin-top:10px; font-size:0.78rem; color:#64748b; }
+    .win { display:none; margin-top:12px; padding:12px; border-radius:12px; background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(14,165,233,.12)); border:1px solid rgba(16,185,129,.4); }
+    .win.show { display:block; } .win h2 { font-size:1rem; margin-bottom:6px; }
+    .win ul { margin-left:18px; color:#d1fae5; font-size:0.84rem; line-height:1.5; }
+    .note { margin-top:8px; font-size:0.76rem; color:#64748b; }
   </style>
 </head>
 <body>
@@ -45,39 +51,62 @@
     <header>
       <div>
         <h1>CCNA · <span>TCP y UDP</span></h1>
-        <p class="subtitle">Asocia cada escenario o protocolo con TCP o UDP.</p>
+        <p class="subtitle">Asocia el protocolo y el transporte a cada aplicación.</p>
       </div>
       <div class="stats">
-        <div class="badge" id="score">Aciertos: 0 / 6</div>
+        <div class="badge" id="score">Aciertos: 0 / 12</div>
         <button class="btn primary" id="btnReset" type="button">Reiniciar</button>
       </div>
     </header>
     <div class="board">
       <section class="stack">
-        <div class="section-title">Transporte</div>
-        <div class="layer">
-          <div class="layer-meta" style="background:var(--tcp)"><div class="num">TCP</div><div class="name">Orientado a conexión · fiable</div></div>
-          <div class="drop" data-layer="tcp"></div>
+        <div class="cols head"><div>Aplicación</div><div>Protocolo</div><div>Transporte</div></div>
+        <div class="cols" data-app="ssh">
+          <div class="app">Acceso remoto a un router</div>
+          <div class="drop" data-kind="proto" data-expect="SSH"></div>
+          <div class="drop" data-kind="trans" data-expect="TCP"></div>
         </div>
-        <div class="layer">
-          <div class="layer-meta" style="background:var(--udp)"><div class="num">UDP</div><div class="name">Sin conexión · rápido</div></div>
-          <div class="drop" data-layer="udp"></div>
+        <div class="cols" data-app="https">
+          <div class="app">Navegación web segura</div>
+          <div class="drop" data-kind="proto" data-expect="HTTPS"></div>
+          <div class="drop" data-kind="trans" data-expect="TCP"></div>
+        </div>
+        <div class="cols" data-app="smtp">
+          <div class="app">Envío de correo electrónico</div>
+          <div class="drop" data-kind="proto" data-expect="SMTP"></div>
+          <div class="drop" data-kind="trans" data-expect="TCP"></div>
+        </div>
+        <div class="cols" data-app="dns">
+          <div class="app">Consulta típica de DNS</div>
+          <div class="drop" data-kind="proto" data-expect="DNS"></div>
+          <div class="drop" data-kind="trans" data-expect="UDP"></div>
+        </div>
+        <div class="cols" data-app="rtp">
+          <div class="app">Streaming en vivo</div>
+          <div class="drop" data-kind="proto" data-expect="RTP/Streaming"></div>
+          <div class="drop" data-kind="trans" data-expect="UDP"></div>
+        </div>
+        <div class="cols" data-app="dhcp">
+          <div class="app">Solicitud de dirección IP al arrancar un PC</div>
+          <div class="drop" data-kind="proto" data-expect="DHCP"></div>
+          <div class="drop" data-kind="trans" data-expect="UDP"></div>
         </div>
       </section>
       <aside class="bank">
-        <div class="section-title">Escenarios</div>
-        <div class="bank-grid" id="bank"></div>
-        <p class="hint">Arrastra cada ficha a TCP o UDP. Si fallas, vuelve al banco.</p>
-        <div class="feedback" id="feedback">Coloca los 6 elementos.</div>
+        <div class="bank-title">Protocolos</div>
+        <div class="bank-grid" id="bankProto"></div>
+        <div class="bank-title">Transporte</div>
+        <div class="bank-grid" id="bankTrans"></div>
+        <div class="feedback" id="feedback">Coloca protocolo y transporte en cada fila.</div>
         <div class="win" id="win">
           <h2>Actividad completada</h2>
           <ul>
-            <li>HTTPS → <strong>TCP</strong></li>
-            <li>SMTP → <strong>TCP</strong></li>
-            <li>SSH a un router → <strong>TCP</strong></li>
-            <li>DNS consulta típica → <strong>UDP</strong></li>
-            <li>Streaming en vivo → <strong>UDP</strong></li>
-            <li>DHCP pide IP al encender → <strong>UDP</strong></li>
+            <li>Router remoto → SSH → TCP</li>
+            <li>Web segura → HTTPS → TCP</li>
+            <li>Correo → SMTP → TCP</li>
+            <li>Consulta DNS → DNS → UDP</li>
+            <li>Streaming → RTP/Streaming → UDP</li>
+            <li>Pedir IP → DHCP → UDP</li>
           </ul>
         </div>
         <p class="note">Formación Servicios TIC / CCNA · Capa de transporte</p>
@@ -85,35 +114,49 @@
     </div>
   </div>
   <script>
-    const TOTAL = 6;
-    const ITEMS = [
-      { id:"https", label:"HTTPS", layer:"tcp", why:"Web segura. Necesita entrega fiable y ordenada: TCP (puerto 443)." },
-      { id:"smtp", label:"SMTP", layer:"tcp", why:"Correo saliente. No puede perderse el mensaje: TCP (puerto 25/587)." },
-      { id:"ssh", label:"SSH: acceso remoto a un router", layer:"tcp", why:"Sesión interactiva y fiable. SSH usa TCP (puerto 22)." },
-      { id:"dns", label:"DNS consulta típica", layer:"udp", why:"La consulta DNS habitual es corta y rápida: UDP (puerto 53). Si falla, se reintenta." },
-      { id:"stream", label:"Streaming en vivo", layer:"udp", why:"Prioriza baja latencia. Mejor perder un fotograma que esperar retransmisión: UDP." },
-      { id:"dhcp", label:"DHCP: el PC pide IP al encender", layer:"udp", why:"Aún no tiene IP; el descubrimiento DHCP va por UDP (67/68)." }
+    const TOTAL = 12;
+    const PROTOS = [
+      { id:"p-ssh", kind:"proto", value:"SSH" },
+      { id:"p-https", kind:"proto", value:"HTTPS" },
+      { id:"p-smtp", kind:"proto", value:"SMTP" },
+      { id:"p-dns", kind:"proto", value:"DNS" },
+      { id:"p-rtp", kind:"proto", value:"RTP/Streaming" },
+      { id:"p-dhcp", kind:"proto", value:"DHCP" }
     ];
-    const NAMES = { tcp:"TCP", udp:"UDP" };
-    const bank = document.getElementById("bank");
+    const TRANS = [
+      { id:"t1", kind:"trans", value:"TCP" },
+      { id:"t2", kind:"trans", value:"TCP" },
+      { id:"t3", kind:"trans", value:"TCP" },
+      { id:"u1", kind:"trans", value:"UDP" },
+      { id:"u2", kind:"trans", value:"UDP" },
+      { id:"u3", kind:"trans", value:"UDP" }
+    ];
+    const bankProto = document.getElementById("bankProto");
+    const bankTrans = document.getElementById("bankTrans");
     const scoreEl = document.getElementById("score");
     const feedback = document.getElementById("feedback");
     const win = document.getElementById("win");
     const drops = [...document.querySelectorAll(".drop")];
-    let placed = new Set(); let drag = null; let ghost = null;
+    let placed = new Set();
+    let drag = null;
+    let ghost = null;
     function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
     function makeChip(item, locked){
       const el=document.createElement("div");
-      el.className="chip"+(locked?" locked":"");
-      el.dataset.id=item.id;
-      el.innerHTML=(locked?"<span>✓</span> ":"")+item.label;
+      el.className="chip"+(item.value==="TCP"?" tcp":"")+(item.value==="UDP"?" udp":"")+(locked?" locked":"");
+      el.dataset.id=item.id; el.dataset.kind=item.kind; el.dataset.value=item.value;
+      el.textContent=item.value;
       if(!locked) bindDrag(el);
       return el;
     }
-    function renderBank(list){ bank.innerHTML=""; list.forEach(function(item){ bank.appendChild(makeChip(item,false)); }); }
+    function renderBanks(){
+      bankProto.innerHTML=""; bankTrans.innerHTML="";
+      shuffle(PROTOS).forEach(function(i){ bankProto.appendChild(makeChip(i,false)); });
+      shuffle(TRANS).forEach(function(i){ bankTrans.appendChild(makeChip(i,false)); });
+    }
     function updateScore(){
       scoreEl.textContent="Aciertos: "+placed.size+" / "+TOTAL;
-      if(placed.size===TOTAL){ win.classList.add("show"); feedback.innerHTML="<strong>Perfecto.</strong> Has asociado los 6 elementos."; }
+      if(placed.size===TOTAL){ win.classList.add("show"); feedback.innerHTML="<strong>Perfecto.</strong> Tabla completa."; }
       else win.classList.remove("show");
     }
     function flash(zone,type){ zone.classList.add(type); setTimeout(function(){ zone.classList.remove(type); },380); }
@@ -121,9 +164,8 @@
       el.addEventListener("pointerdown", function(e){
         if(el.classList.contains("locked")) return;
         e.preventDefault();
-        const item=ITEMS.find(function(i){ return i.id===el.dataset.id; });
         const rect=el.getBoundingClientRect();
-        drag={el:el,item:item,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top};
+        drag={ el:el, kind:el.dataset.kind, value:el.dataset.value, id:el.dataset.id, offsetX:e.clientX-rect.left, offsetY:e.clientY-rect.top };
         ghost=el.cloneNode(true); ghost.classList.add("ghost");
         ghost.style.width=rect.width+"px"; ghost.style.left=rect.left+"px"; ghost.style.top=rect.top+"px";
         document.body.appendChild(ghost); el.classList.add("dragging"); el.setPointerCapture(e.pointerId);
@@ -147,21 +189,31 @@
     function cleanupDrag(){ if(ghost) ghost.remove(); if(drag) drag.el.classList.remove("dragging"); ghost=null; drag=null; }
     function finishDrop(zone){
       const current=drag; cleanupDrag(); if(!current) return;
-      if(!zone){ feedback.textContent="Suelta la ficha sobre TCP o UDP."; return; }
-      const layer=zone.dataset.layer;
-      if(layer===current.item.layer){
-        placed.add(current.item.id); current.el.remove();
-        zone.appendChild(makeChip(current.item,true)); flash(zone,"ok-flash");
-        feedback.innerHTML="<strong>"+current.item.label+"</strong> → "+NAMES[layer]+". "+current.item.why;
-        updateScore();
-      } else {
+      if(!zone){ feedback.textContent="Suelta la ficha en la columna Protocolo o Transporte."; return; }
+      if(zone.dataset.kind!==current.kind){
         flash(zone,"bad-flash");
-        feedback.innerHTML="<strong>"+current.item.label+"</strong> no usa "+NAMES[layer]+". Prueba el otro.";
+        feedback.innerHTML="Esa ficha va en la columna <strong>"+(current.kind==="proto"?"Protocolo":"Transporte")+"</strong>.";
+        return;
       }
+      if(zone.dataset.expect!==current.value){
+        flash(zone,"bad-flash");
+        feedback.innerHTML="<strong>"+current.value+"</strong> no corresponde a esa aplicación.";
+        return;
+      }
+      placed.add(zone.dataset.kind+"-"+zone.parentElement.dataset.app);
+      current.el.remove();
+      zone.innerHTML="";
+      zone.appendChild(makeChip({id:current.id,kind:current.kind,value:current.value}, true));
+      flash(zone,"ok-flash");
+      feedback.innerHTML="<strong>"+current.value+"</strong> correcto en esta fila.";
+      updateScore();
     }
     function reset(){
-      placed.clear(); drops.forEach(function(d){ d.innerHTML=""; });
-      renderBank(shuffle(ITEMS)); feedback.textContent="Coloca los 6 elementos."; updateScore();
+      placed.clear();
+      drops.forEach(function(d){ d.innerHTML=""; });
+      renderBanks();
+      feedback.textContent="Coloca protocolo y transporte en cada fila.";
+      updateScore();
     }
     document.getElementById("btnReset").addEventListener("click", reset);
     reset();
